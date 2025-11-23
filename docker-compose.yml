@@ -1,0 +1,23 @@
+services:
+  app:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portfolio-kate-secure.rule=Host(`portfolio-tirsky.promotion-pal.ru`)"
+      - "traefik.http.routers.portfolio-kate-secure.entrypoints=websecure"
+      - "traefik.http.services.portfolio-kate.loadbalancer.server.port=3000"
+      - "traefik.http.routers.portfolio-kate-secure.tls.certresolver=letsencrypt"
+
+    networks:
+      - traefik-network
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+    restart: unless-stopped
+
+networks:
+  traefik-network:
+    external: true
+    name: traefik-network
